@@ -1,0 +1,44 @@
+
+#!/usr/bin/env -S java --source 11
+// el parámetro -S es para poder pasar parámetros a java, y --source se lo estamos pasando para decir que
+// ejecute esto como java 11
+
+// Para que el interprete de java ignore la línea con el #!, el archivo NO tiene que terminar en .java
+import java.nio.file.Files;
+import java.nio.charset.Charset;
+import java.util.List;
+import java.nio.file.Paths;
+import java.io.IOException;
+import java.util.Random;
+import java.util.Scanner;
+
+// Al ejecutar un script de java, se va a usar el main de la primer clase que se encuentre
+public class BolaMagica {
+   public static void main(String[] args) throws IOException {
+       // leemos los argumentos que le pasan al programa
+       String rutaALasRespuestas = args[0];
+       List<String> respuestas = Files.readAllLines(Paths.get(rutaALasRespuestas), Charset.defaultCharset());
+       Scanner scanner = new Scanner(System.in);
+       Random random = new Random();
+
+       // el while True es para que el programa nos vuelva a preguntar en vez de terminar
+       while(true) {
+           // usamos stdout para mostrar cosas por la consola
+           System.out.println("Preguntá algo:");
+           System.out.print("> ");
+
+           // y usamos stdin para leer la entrada
+           String pregunta = scanner.nextLine();
+           // agregamos una forma de salir del while para terminar el programa
+           if(pregunta.equals("salir")) {
+               System.out.println("Hasta luego!");
+               break;
+           }
+
+           String respuesta = respuestas.get(random.nextInt(respuestas.size()));
+           System.out.println(respuesta);
+       }
+   }
+}
+
+
