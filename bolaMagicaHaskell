@@ -1,0 +1,28 @@
+#!/usr/bin/env runhaskell
+import System.Environment (getArgs)
+import System.Exit (exitSuccess)
+import Control.Monad (forever, when)
+-- la siguiente linea requiere incluir la biblioteca random-fu al ambiente donde se ejecute el script
+-- eso se puede lograr con cabal build random-fu
+import Data.Random (sample, randomElement)
+
+-- forever hace que el programa nos vuelva a preguntar en vez de terminar luego de una respuesta
+main = forever $ do
+   -- leemos los argumentos que le pasan al programa
+   rutaARespuestas <- head <$> getArgs
+   respuestas <- lines <$> readFile rutaARespuestas
+
+   -- usamos stdout para mostrar cosas por la consola
+   putStrLn "Preguntá algo:"
+   putStr "> "
+
+   -- y usamos stdin para leer la entrada
+   pregunta <- getLine
+
+   -- cuando la pregunta es el string "salir" cerramos el programa
+   when (pregunta == "salir") $ do
+       putStrLn "Hasta Luego!"
+       exitSuccess
+      
+   respuesta <- sample $ randomElement respuestas
+   putStrLn respuesta

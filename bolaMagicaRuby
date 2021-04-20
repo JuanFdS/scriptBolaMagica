@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+ruta_a_respuestas = ARGV[0] # leemos los argumentos que le pasan al programa
+respuestas = File.readlines ruta_a_respuestas
+
+# el while True es para que el programa nos vuelva a preguntar en vez de terminar
+while true
+   # usamos stdout para mostrar cosas por la consola
+   puts "Preguntá algo:"
+   print "> "
+
+   # y usamos stdin para leer la entrada
+   pregunta = $stdin.gets.chomp
+
+   # agregamos una forma de salir del while para terminar el programa
+   if pregunta == "salir"
+       puts "Hasta luego!"
+       break
+   end
+
+   respuesta = respuestas.sample
+   puts respuesta
+end

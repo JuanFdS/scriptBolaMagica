@@ -1,0 +1,39 @@
+#!/usr/bin/env node
+const fs = require('fs');
+const readline = require('readline');
+
+// leemos los argumentos del programa, recién a partir del tercero son los que se pasan como parámetro
+const rutaALasRespuestas = process.argv[2];
+const respuestas = fs.readFileSync(rutaALasRespuestas, 'utf-8').split('\n').filter(linea => linea.length != "");
+
+const obtenerRespuesta = () => respuestas[Math.floor(Math.random() * respuestas.length)];
+
+const rl = readline.createInterface({
+   input: process.stdin,
+   output: process.stdout
+ });
+
+
+// Como en node leer el input del usuario es una operación asincrónica,
+// vamos a encararlo de forma diferente a como hicimos en los otros scripts.
+// Usamos recursividad para que tras cada respuesta se vuelva a empezar
+const preguntarYResponder = () => {
+   // usamos stdout para mostrar cosas por la consola
+   console.log("Preguntá algo:");
+   // y usamos stdin para leer la entrada
+   rl.question("> ", respuesta => {
+       // agregamos una forma de cortar la recursividad
+       if(respuesta == "salir") {
+           console.log("Hasta luego!");
+           rl.close();
+       } else {
+           console.log(obtenerRespuesta());
+           // si no vino "salir", llamamos de nuevo a la función recursivamente
+           preguntarYResponder();
+       }
+   })
+}
+
+// Lo de arriba fue la definición de la función, hay que llamarla
+// una vez para que empiece el programa
+preguntarYResponder();
