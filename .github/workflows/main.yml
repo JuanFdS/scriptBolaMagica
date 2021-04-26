@@ -32,6 +32,6 @@ jobs:
           cd paraDeployar
           npm install
           npm run generateHtml
-          git add .
+          git add ../tabla/scriptsTable.html
           git commit -m "Changes"
           git push origin main:gh-pages
