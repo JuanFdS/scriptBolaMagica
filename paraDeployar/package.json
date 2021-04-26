@@ -1,0 +1,14 @@
+{
+  "name": "paradeployar",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "generateHtml": "node generarTablaEnHTML.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "squirrelly": "^8.0.8"
+  }
+}
