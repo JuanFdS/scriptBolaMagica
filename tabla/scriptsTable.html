@@ -1,0 +1,257 @@
+
+<link rel="stylesheet" href="prism.css"/>
+<link rel="stylesheet" href="scriptsTable.css"/>
+
+<script src="prism.js"></script>
+
+<script>
+
+    function chooseLanguage(evt, language) {
+  // Declare all variables
+  var i, tabcontent, tablinks;
+
+  // Get all elements with class="tabcontent" and hide them
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+
+  // Get all elements with class="tablinks" and remove the class "active"
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+
+  // Show the current tab, and add an "active" class to the button that opened the tab
+  document.getElementById(language).style.display = "block";
+  evt.currentTarget.className += " active";
+} 
+</script>
+
+<!-- Tab links -->
+<div class="tab">
+      <button class="tablinks" onclick="chooseLanguage(event, 'haskell')">haskell</button>
+      <button class="tablinks" onclick="chooseLanguage(event, 'java')">java</button>
+      <button class="tablinks" onclick="chooseLanguage(event, 'javascript')">javascript</button>
+      <button class="tablinks" onclick="chooseLanguage(event, 'kotlin')">kotlin</button>
+      <button class="tablinks" onclick="chooseLanguage(event, 'python')">python</button>
+      <button class="tablinks" onclick="chooseLanguage(event, 'ruby')">ruby</button>
+  </div>
+
+
+<!-- Tab content -->
+<span>
+            <div id="haskell" class="tabcontent">
+        <pre>
+            <code class="language-haskell" id="codigo-haskell">#!/usr/bin/env runhaskell
+import System.Environment (getArgs)
+import System.Exit (exitSuccess)
+import Control.Monad (forever, when)
+-- la siguiente linea requiere incluir la biblioteca random-fu al ambiente donde se ejecute el script
+-- eso se puede lograr con cabal build random-fu
+import Data.Random (sample, randomElement)
+
+-- forever hace que el programa nos vuelva a preguntar en vez de terminar luego de una respuesta
+main = forever $ do
+   -- leemos los argumentos que le pasan al programa
+   rutaARespuestas &lt;- head &lt;$&gt; getArgs
+   respuestas &lt;- lines &lt;$&gt; readFile rutaARespuestas
+
+   -- usamos stdout para mostrar cosas por la consola
+   putStrLn &quot;Preguntá algo:&quot;
+   putStr &quot;&gt; &quot;
+
+   -- y usamos stdin para leer la entrada
+   pregunta &lt;- getLine
+
+   -- cuando la pregunta es el string &quot;salir&quot; cerramos el programa
+   when (pregunta == &quot;salir&quot;) $ do
+       putStrLn &quot;Hasta Luego!&quot;
+       exitSuccess
+      
+   respuesta &lt;- sample $ randomElement respuestas
+   putStrLn respuesta</code>
+        </pre>
+        </div>
+            <div id="java" class="tabcontent">
+        <pre>
+            <code class="language-java" id="codigo-java">
+#!/usr/bin/env -S java --source 11
+// el parámetro -S es para poder pasar parámetros a java, y --source se lo estamos pasando para decir que
+// ejecute esto como java 11
+
+// Para que el interprete de java ignore la línea con el #!, el archivo NO tiene que terminar en .java
+import java.nio.file.Files;
+import java.nio.charset.Charset;
+import java.util.List;
+import java.nio.file.Paths;
+import java.io.IOException;
+import java.util.Random;
+import java.util.Scanner;
+
+// Al ejecutar un script de java, se va a usar el main de la primer clase que se encuentre
+public class BolaMagica {
+   public static void main(String[] args) throws IOException {
+       // leemos los argumentos que le pasan al programa
+       String rutaALasRespuestas = args[0];
+       List&lt;String&gt; respuestas = Files.readAllLines(Paths.get(rutaALasRespuestas), Charset.defaultCharset());
+       Scanner scanner = new Scanner(System.in);
+       Random random = new Random();
+
+       // el while True es para que el programa nos vuelva a preguntar en vez de terminar
+       while(true) {
+           // usamos stdout para mostrar cosas por la consola
+           System.out.println(&quot;Preguntá algo:&quot;);
+           System.out.print(&quot;&gt; &quot;);
+
+           // y usamos stdin para leer la entrada
+           String pregunta = scanner.nextLine();
+           // agregamos una forma de salir del while para terminar el programa
+           if(pregunta.equals(&quot;salir&quot;)) {
+               System.out.println(&quot;Hasta luego!&quot;);
+               break;
+           }
+
+           String respuesta = respuestas.get(random.nextInt(respuestas.size()));
+           System.out.println(respuesta);
+       }
+   }
+}
+
+
+</code>
+        </pre>
+        </div>
+            <div id="javascript" class="tabcontent">
+        <pre>
+            <code class="language-javascript" id="codigo-javascript">#!/usr/bin/env node
+const fs = require(&#39;fs&#39;);
+const readline = require(&#39;readline&#39;);
+
+// leemos los argumentos del programa, recién a partir del tercero son los que se pasan como parámetro
+const rutaALasRespuestas = process.argv[2];
+const respuestas = fs.readFileSync(rutaALasRespuestas, &#39;utf-8&#39;).split(&#39;\n&#39;).filter(linea =&gt; linea.length != &quot;&quot;);
+
+const obtenerRespuesta = () =&gt; respuestas[Math.floor(Math.random() * respuestas.length)];
+
+const rl = readline.createInterface({
+   input: process.stdin,
+   output: process.stdout
+ });
+
+
+// Como en node leer el input del usuario es una operación asincrónica,
+// vamos a encararlo de forma diferente a como hicimos en los otros scripts.
+// Usamos recursividad para que tras cada respuesta se vuelva a empezar
+const preguntarYResponder = () =&gt; {
+   // usamos stdout para mostrar cosas por la consola
+   console.log(&quot;Preguntá algo:&quot;);
+   // y usamos stdin para leer la entrada
+   rl.question(&quot;&gt; &quot;, respuesta =&gt; {
+       // agregamos una forma de cortar la recursividad
+       if(respuesta == &quot;salir&quot;) {
+           console.log(&quot;Hasta luego!&quot;);
+           rl.close();
+       } else {
+           console.log(obtenerRespuesta());
+           // si no vino &quot;salir&quot;, llamamos de nuevo a la función recursivamente
+           preguntarYResponder();
+       }
+   })
+}
+
+// Lo de arriba fue la definición de la función, hay que llamarla
+// una vez para que empiece el programa
+preguntarYResponder();
+</code>
+        </pre>
+        </div>
+            <div id="kotlin" class="tabcontent">
+        <pre>
+            <code class="language-kotlin" id="codigo-kotlin">#!/usr/bin/env -S kotlinc -script
+// los scripts en kotlin se corren con kotlinc -script y tienen que terminar en .kts
+import java.io.File
+
+// leemos los argumentos que le pasan al programa
+val rutaALasRespuestas = args[0]
+val respuestas = File(rutaALasRespuestas).readLines()
+
+// el while True es para que el programa nos vuelva a preguntar en vez de terminar
+while(true) {
+   // usamos stdout para mostrar cosas por la consola
+   println(&quot;Preguntá algo:&quot;)
+   print(&quot;&gt; &quot;)
+
+   // Esta linea es necesaria porque si no el &quot;&gt; &quot; no se iba a imprimir
+   // por pantalla hasta despues de pedir input al usuario :(
+   System.out.flush()
+  
+   // y usamos stdin para leer la entrada
+   val pregunta = readLine()
+   // agregamos una forma de salir del while para terminar el programa
+   if(pregunta == &quot;salir&quot;) {
+       println(&quot;Hasta luego!&quot;)
+       break
+   }
+
+   val respuesta = respuestas.random()
+   println(respuesta)
+}</code>
+        </pre>
+        </div>
+            <div id="python" class="tabcontent">
+        <pre>
+            <code class="language-python" id="codigo-python">#!/usr/bin/env python
+import sys
+import random
+
+# leemos los argumentos que le pasan al programa
+archivo_de_respuestas = open(sys.argv[1])
+respuestas = archivo_de_respuestas.readlines()
+archivo_de_respuestas.close()
+
+# el while True es para que el programa nos vuelva a preguntar en vez de terminar
+while True:
+   # usamos stdout para mostrar cosas por la consola
+   print(&quot;Preguntá algo:&quot;)
+
+   # y usamos stdin para leer la entrada
+   pregunta = input(&quot;&gt;&quot;)
+
+   # agregamos una forma de salir del while para terminar el programa
+   if(pregunta == &quot;salir&quot;):
+       print(&quot;Hasta luego!&quot;)
+       break
+
+   respuesta = random.choice(respuestas)
+   print(respuesta)
+</code>
+        </pre>
+        </div>
+            <div id="ruby" class="tabcontent">
+        <pre>
+            <code class="language-ruby" id="codigo-ruby">#!/usr/bin/env ruby
+ruta_a_respuestas = ARGV[0] # leemos los argumentos que le pasan al programa
+respuestas = File.readlines ruta_a_respuestas
+
+# el while True es para que el programa nos vuelva a preguntar en vez de terminar
+while true
+   # usamos stdout para mostrar cosas por la consola
+   puts &quot;Preguntá algo:&quot;
+   print &quot;&gt; &quot;
+
+   # y usamos stdin para leer la entrada
+   pregunta = $stdin.gets.chomp
+
+   # agregamos una forma de salir del while para terminar el programa
+   if pregunta == &quot;salir&quot;
+       puts &quot;Hasta luego!&quot;
+       break
+   end
+
+   respuesta = respuestas.sample
+   puts respuesta
+end</code>
+        </pre>
+        </div>
+    </span>
