@@ -27,7 +27,6 @@ jobs:
       - name: Tirar todo a un archivo
         run: |
           git fetch
-          git checkout gh-pages
           git config user.name github-actions
           git config user.email github-actions@github.com
           cd paraDeployar
@@ -35,4 +34,4 @@ jobs:
           npm run generarTablaEnHTML.js
           git add .
           git commit -m "Changes"
-          git push origin gh-pages
+          git push origin main:gh-pages
