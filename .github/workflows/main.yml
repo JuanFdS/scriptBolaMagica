@@ -34,4 +34,4 @@ jobs:
           npm run generateHtml
           git add ../tabla/scriptsTable.html
           git commit -m "Changes"
-          git push origin main:gh-pages
+          git push -f origin main:gh-pages
