@@ -40,13 +40,15 @@ const template = `
 
 
 <!-- Tab content -->
-{{@each(it) => languageWithScript}}
-    <div id="{{languageWithScript.language}}" class="tabcontent">
-    <pre>
-        <code class="language-{{languageWithScript.language}}" id="codigo-{{languageWithScript.language}}">{{languageWithScript.script}}</code>
-    </pre>
-    </div>
-{{/each}}
+<span>
+    {{@each(it) => languageWithScript}}
+        <div id="{{languageWithScript.language}}" class="tabcontent">
+        <pre>
+            <code class="language-{{languageWithScript.language}}" id="codigo-{{languageWithScript.language}}">{{languageWithScript.script}}</code>
+        </pre>
+        </div>
+    {{/each}}
+</span>
 `
 
 const scriptsPath = '../bolaMagica'
