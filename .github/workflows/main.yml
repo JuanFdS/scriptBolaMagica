@@ -27,6 +27,7 @@ jobs:
       - name: Tirar todo a un archivo
         run: |
           cat * > asd
+          git fetch
           git checkout gh-pages
           git add asd
           git commit -m "Changes"
